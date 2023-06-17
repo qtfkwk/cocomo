@@ -73,7 +73,7 @@ Total Physical Source Lines of Code (SLOC)                    = 106
 Development Effor Estimate, Person-Years (Person-Months)      = 0.02 (0.23)
   (Basic COCOMO model, Person-Months = 2.40*(KSLOC**1.05)*1.00)
 Schedule Estimate, Years (Months)                             = 0.12 (1.42)
-  (Basic COMOMO model, Months = 2.50*(person-months**0.38))
+  (Basic COCOMO model, Months = 2.50*(person-months**0.38))
 Estimated Average Number of Developers (Effort/Schedule)      = 0.16
 Total Estimated Cost to Develop                               = $2560
   (average salary = $56286/year, overhead = 2.40)
