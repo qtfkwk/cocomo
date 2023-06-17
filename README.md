@@ -5,7 +5,7 @@ library to calculate total SLOC and [scc] as reference
 
 See also [tokei#359]
 
-[tokei]: https:://crates.io/crates/tokei
+[tokei]: https://crates.io/crates/tokei
 [tokei#359]: https://github.com/XAMPPRocky/tokei/issues/359
 [scc]: https://github.com/boyter/scc
 
