@@ -13,7 +13,7 @@ See also [tokei#359].
 
 ```test
 $ cocomo -h
-COCOMO (Constructive Cost Model) CLI utility
+COCOMO (Constructive Cost Model) CLI utility and library
 
 Usage: cocomo [OPTIONS] [PATH]...
 
@@ -28,13 +28,14 @@ Options:
       --eaf <f64>
           Effort Adjustment Factor [default: 1.0]
       --project-type <TYPE>
-          Project type (organic, semi-detached, embedded) [default: organic]
+          Project type [default: organic] [possible values: organic,
+          semi-detached, embedded]
       --currency-symbol <STRING>
           Currency symbol [default: $]
       --sloccount
-          Use SLOCCount-style format
+          Use SLOCCount-style output format
   -h, --help
-          Print help
+          Print help (see more with '--help')
   -V, --version
           Print version
 ```

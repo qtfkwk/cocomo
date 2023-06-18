@@ -7,3 +7,4 @@
   update dependencies
 * 0.3.1 (2023-06-18): Fix typo
 * 0.3.2 (2023-06-18): Update readme
+* 0.3.3 (2023-06-18): Update readme
