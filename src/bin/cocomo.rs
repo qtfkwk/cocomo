@@ -61,7 +61,7 @@ fn main() {
         println!(
             "\
 Total Physical Source Lines of Code (SLOC)                    = {sloc:.0}
-Development Effor Estimate, Person-Years (Person-Months)      = {:.2} ({effort:.2})
+Development Effort Estimate, Person-Years (Person-Months)     = {:.2} ({effort:.2})
   (Basic COCOMO model, Person-Months = {:.2}*(KSLOC**{:.2})*{:.2})
 Schedule Estimate, Years (Months)                             = {:.2} ({months:.2})
   (Basic COCOMO model, Months = {:.2}*(person-months**{:.2}))
