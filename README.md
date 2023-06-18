@@ -82,7 +82,7 @@ Estimated People Required  | 2.10
 ```text
 $ cocomo --sloccount ~/github.com/XAMPPRocky/tokei
 Total Physical Source Lines of Code (SLOC)                    = 5567
-Development Effor Estimate, Person-Years (Person-Months)      = 1.21 (14.56)
+Development Effort Estimate, Person-Years (Person-Months)     = 1.21 (14.56)
   (Basic COCOMO model, Person-Months = 2.40*(KSLOC**1.05)*1.00)
 Schedule Estimate, Years (Months)                             = 0.58 (6.92)
   (Basic COCOMO model, Months = 2.50*(person-months**0.38))
