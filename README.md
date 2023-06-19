@@ -30,6 +30,8 @@ Options:
       --project-type <TYPE>
           Project type [default: organic] [possible values: organic,
           semi-detached, embedded]
+      --custom <f64,f64,f64,f64>
+          Custom parameters
       --currency-symbol <STRING>
           Currency symbol [default: $]
       --sloccount

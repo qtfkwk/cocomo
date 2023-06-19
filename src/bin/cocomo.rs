@@ -17,12 +17,12 @@ struct Cli {
     eaf: f64,
 
     /// Project type
-    #[arg(
-        long,
-        value_name = "TYPE",
-        default_value = "organic",
-    )]
+    #[arg(long, value_name = "TYPE", default_value = "organic")]
     project_type: ProjectType,
+
+    /// Custom parameters
+    #[arg(long, value_name = "f64,f64,f64,f64", conflicts_with = "project_type")]
+    custom: Option<String>,
 
     /// Currency symbol
     #[arg(long, value_name = "STRING", default_value = "$")]
@@ -40,57 +40,40 @@ struct Cli {
 fn main() {
     // Process command line options
     let cli = Cli::parse();
-    let cur = &cli.currency_symbol;
-    let params = cli.project_type.to_params();
-
-    // Get total SLOC
-    let config = tokei::Config::default();
-    let mut languages = tokei::Languages::new();
-    languages.get_statistics(&cli.paths, &[], &config);
-    let sum = languages.total();
-    let sloc = sum.code as f64;
+    let params = if let Some(custom) = cli.custom {
+        let s: Vec<f64> = custom
+            .split(',')
+            .map(|x| {
+                x.parse::<f64>().unwrap_or_else(|e| {
+                    eprintln!("{e}: {x:?}");
+                    std::process::exit(1);
+                })
+            })
+            .collect();
+        if s.len() == 4 {
+            (s[0], s[1], s[2], s[3])
+        } else {
+            eprintln!("Invalid custom project parameters: {custom:?}");
+            std::process::exit(1);
+        }
+    } else {
+        cli.project_type.to_params()
+    };
 
     // Calculate COCOMO estimates
-    let effort = estimate_effort(sloc, cli.eaf, &params);
-    let cost = estimate_cost(effort, cli.average_wage, cli.overhead);
-    let months = estimate_months(effort, &params);
-    let people = effort / months;
+    let project = Cocomo::new(
+        &cli.currency_symbol,
+        cli.eaf,
+        cli.average_wage,
+        cli.overhead,
+        &params,
+        &cli.paths,
+    );
 
     // Print report
     if cli.sloccount {
-        println!(
-            "\
-Total Physical Source Lines of Code (SLOC)                    = {sloc:.0}
-Development Effort Estimate, Person-Years (Person-Months)     = {:.2} ({effort:.2})
-  (Basic COCOMO model, Person-Months = {:.2}*(KSLOC**{:.2})*{:.2})
-Schedule Estimate, Years (Months)                             = {:.2} ({months:.2})
-  (Basic COCOMO model, Months = {:.2}*(person-months**{:.2}))
-Estimated Average Number of Developers (Effort/Schedule)      = {people:.2}
-Total Estimated Cost to Develop                               = {cur}{cost:.0}
-  (average salary = {cur}{:.0}/year, overhead = {:.2})
-\
-            ",
-            effort / 12.0,
-            &params.0,
-            &params.1,
-            cli.eaf,
-            months / 12.0,
-            &params.2,
-            &params.3,
-            cli.average_wage,
-            cli.overhead,
-        );
+        println!("{}", project.sloccount_report());
     } else {
-        println!(
-            "\
-Description                | Value
----------------------------|---------------------------------
-Total Source Lines of Code | {sloc:.0}
-Estimated Cost to Develop  | {cur}{cost:.2}
-Estimated Schedule Effort  | {months:.2} months
-Estimated People Required  | {people:.2}
-\
-            "
-        );
+        println!("{}", project.report());
     }
 }

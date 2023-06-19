@@ -8,3 +8,5 @@
 * 0.3.1 (2023-06-18): Fix typo
 * 0.3.2 (2023-06-18): Update readme
 * 0.3.3 (2023-06-18): Update readme
+* 0.4.0 (2023-06-19): CLI: add `--custom` option to CLI; library: add `Cocomo`
+  struct and `total_sloc`, `cocomo` functions; apply clippy fixes; run cargo fmt
