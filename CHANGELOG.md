@@ -11,3 +11,6 @@
 * 0.4.0 (2023-06-19): CLI: add `--custom` option; library: add `Cocomo` struct
   and `total_sloc`, `cocomo` functions; apply clippy fixes; run cargo fmt
 * 0.4.1 (2023-06-19): Fix changelog
+* 0.5.0 (2023-06-21): Add `--development-time` option / split from parameters;
+  unify the report methods and add `OutputFormat` enum; improve readme; update
+  dependencies

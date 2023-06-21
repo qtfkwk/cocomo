@@ -1,10 +1,11 @@
 # About
 
-CLI and library implementation of COCOMO (Constructive Cost Model) estimates
+CLI and library implementation of [COCOMO] (Constructive Cost Model) estimates
 using [tokei] as a library to calculate total SLOC and [scc] as reference
 
 See also [tokei#359].
 
+[COCOMO]: https://en.wikipedia.org/wiki/COCOMO
 [tokei]: https://crates.io/crates/tokei
 [tokei#359]: https://github.com/XAMPPRocky/tokei/issues/359
 [scc]: https://github.com/boyter/scc
@@ -14,6 +15,12 @@ See also [tokei#359].
 ```test
 $ cocomo -h
 COCOMO (Constructive Cost Model) CLI utility and library
+
+<https://crates.io/crates/cocomo> / <https://github.com/qtfkwk/cocomo>
+
+See also: <https://en.wikipedia.org/wiki/COCOMO>
+
+---
 
 Usage: cocomo [OPTIONS] [PATH]...
 
@@ -26,16 +33,19 @@ Options:
       --overhead <f64>
           Overhead [default: 2.4]
       --eaf <f64>
-          Effort Adjustment Factor [default: 1.0]
+          Effort Adjustment Factor (EAF); typically 0.9 - 1.4 [default: 1.0]
       --project-type <TYPE>
-          Project type [default: organic] [possible values: organic,
-          semi-detached, embedded]
-      --custom <f64,f64,f64,f64>
-          Custom parameters
+          Project type [default: organic] [possible values: embedded, organic,
+          semi-detached]
+      --custom <f64,f64,f64>
+          Custom parameters (a, b, c)
+      --development-time <f64>
+          Development time (d) [default: 2.5]
       --currency-symbol <STRING>
           Currency symbol [default: $]
-      --sloccount
-          Use SLOCCount-style output format
+  -o, --output-format <FORMAT>
+          Output format [default: markdown-table] [possible values:
+          markdown-table, sloccount]
   -h, --help
           Print help (see more with '--help')
   -V, --version
@@ -83,7 +93,7 @@ Estimated People Required  | 2.10
 ```
 
 ```text
-$ cocomo --sloccount ~/github.com/XAMPPRocky/tokei
+$ cocomo ~/github.com/XAMPPRocky/tokei -o sloccount
 Total Physical Source Lines of Code (SLOC)                    = 5567
 Development Effort Estimate, Person-Years (Person-Months)     = 1.21 (14.56)
   (Basic COCOMO model, Person-Months = 2.40*(KSLOC**1.05)*1.00)

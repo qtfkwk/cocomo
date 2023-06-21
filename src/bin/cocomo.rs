@@ -2,7 +2,18 @@ use clap::Parser;
 use cocomo::*;
 
 #[derive(Parser)]
-#[command(about, version, max_term_width = 80)]
+#[command(
+    about = "\
+COCOMO (Constructive Cost Model) CLI utility and library
+
+<https://crates.io/crates/cocomo> / <https://github.com/qtfkwk/cocomo>
+
+See also: <https://en.wikipedia.org/wiki/COCOMO>
+
+---",
+    version,
+    max_term_width = 80
+)]
 struct Cli {
     /// Average Wage
     #[arg(long, value_name = "f64", default_value = "56286.0")]
@@ -12,7 +23,7 @@ struct Cli {
     #[arg(long, value_name = "f64", default_value = "2.4")]
     overhead: f64,
 
-    /// Effort Adjustment Factor
+    /// Effort Adjustment Factor (EAF); typically 0.9 - 1.4
     #[arg(long, value_name = "f64", default_value = "1.0")]
     eaf: f64,
 
@@ -20,17 +31,21 @@ struct Cli {
     #[arg(long, value_name = "TYPE", default_value = "organic")]
     project_type: ProjectType,
 
-    /// Custom parameters
-    #[arg(long, value_name = "f64,f64,f64,f64", conflicts_with = "project_type")]
+    /// Custom parameters (a, b, c)
+    #[arg(long, value_name = "f64,f64,f64", conflicts_with = "project_type")]
     custom: Option<String>,
+
+    /// Development time (d)
+    #[arg(long, value_name = "f64", default_value = "2.5")]
+    development_time: f64,
 
     /// Currency symbol
     #[arg(long, value_name = "STRING", default_value = "$")]
     currency_symbol: String,
 
-    /// Use SLOCCount-style output format
-    #[arg(long)]
-    sloccount: bool,
+    /// Output format
+    #[arg(short, long, value_name = "FORMAT", default_value = "markdown-table")]
+    output_format: OutputFormat,
 
     /// Files / Directories
     #[arg(value_name = "PATH", default_value = ".")]
@@ -50,8 +65,8 @@ fn main() {
                 })
             })
             .collect();
-        if s.len() == 4 {
-            (s[0], s[1], s[2], s[3])
+        if s.len() == 3 {
+            (s[0], s[1], s[2])
         } else {
             eprintln!("Invalid custom project parameters: {custom:?}");
             std::process::exit(1);
@@ -67,13 +82,10 @@ fn main() {
         cli.average_wage,
         cli.overhead,
         &params,
+        cli.development_time,
         &cli.paths,
     );
 
     // Print report
-    if cli.sloccount {
-        println!("{}", project.sloccount_report());
-    } else {
-        println!("{}", project.report());
-    }
+    println!("{}", project.report(&cli.output_format));
 }
