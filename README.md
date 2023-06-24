@@ -28,6 +28,9 @@ Arguments:
   [PATH]...  Files / Directories [default: .]
 
 Options:
+      --sloc <N>
+          Source lines of code [default: *calculate from Files / Directories
+          argument(s)*]
       --average-wage <f64>
           Average Wage [default: 56286.0]
       --overhead <f64>
@@ -53,6 +56,8 @@ Options:
 ```
 
 # Examples
+
+Use [tokei] CLI to count lines of code in a given directory
 
 ```text
 $ tokei ~/github.com/XAMPPRocky/tokei
@@ -82,6 +87,8 @@ $ tokei ~/github.com/XAMPPRocky/tokei
 ===============================================================================
 ```
 
+Use [cocomo] to calculate COCOMO estimates
+
 ```text
 $ cocomo ~/github.com/XAMPPRocky/tokei
 Description                | Value
@@ -91,6 +98,8 @@ Estimated Cost to Develop  | $163,886.77
 Estimated Schedule Effort  | 6.92 months
 Estimated People Required  | 2.10
 ```
+
+Add `-o sloccount` to use the SLOCCount-style output format
 
 ```text
 $ cocomo ~/github.com/XAMPPRocky/tokei -o sloccount
@@ -102,5 +111,18 @@ Schedule Estimate, Years (Months)                             = 0.58 (6.92)
 Estimated Average Number of Developers (Effort/Schedule)      = 2.10
 Total Estimated Cost to Develop                               = $163,887
   (average salary = $56,286/year, overhead = 2.40)
+```
+
+Pass `--sloc N` to calculate COCOMO estimates for a given number of lines of
+code (without counting SLOC in any files or directories)
+
+```text
+$ cocomo --sloc 5567
+Description                | Value
+---------------------------|---------------------------------
+Total Source Lines of Code | 5,567
+Estimated Cost to Develop  | $163,886.77
+Estimated Schedule Effort  | 6.92 months
+Estimated People Required  | 2.10
 ```
 

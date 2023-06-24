@@ -15,3 +15,4 @@
   unify the report methods and add `OutputFormat` enum; improve readme; update
   dependencies
 * 0.6.0 (2023-06-24): Improve number formatting; update dependencies
+* 0.7.0 (2023-06-24): Add `--sloc` option; improve readme; update dependencies

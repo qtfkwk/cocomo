@@ -113,8 +113,13 @@ impl Cocomo {
         params: &(f64, f64, f64),
         dev_time: f64,
         paths: &[PathBuf],
+        sloc: &Option<f64>,
     ) -> Cocomo {
-        let sloc = total_sloc(paths);
+        let sloc = if let Some(n) = sloc {
+            *n
+        } else {
+            total_sloc(paths)
+        };
         let (effort, cost, months, people) =
             cocomo(sloc, eaf, avg_wage, overhead, params, dev_time);
         Cocomo {

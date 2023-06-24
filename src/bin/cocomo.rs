@@ -15,6 +15,10 @@ See also: <https://en.wikipedia.org/wiki/COCOMO>
     max_term_width = 80
 )]
 struct Cli {
+    /// Source lines of code [default: *calculate from Files / Directories argument(s)*]
+    #[arg(long, value_name = "N", conflicts_with = "paths")]
+    sloc: Option<f64>,
+
     /// Average Wage
     #[arg(long, value_name = "f64", default_value = "56286.0")]
     average_wage: f64,
@@ -84,6 +88,7 @@ fn main() {
         &params,
         cli.development_time,
         &cli.paths,
+        &cli.sloc,
     );
 
     // Print report
