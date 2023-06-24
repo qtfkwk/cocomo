@@ -86,21 +86,21 @@ $ tokei ~/github.com/XAMPPRocky/tokei
 $ cocomo ~/github.com/XAMPPRocky/tokei
 Description                | Value
 ---------------------------|---------------------------------
-Total Source Lines of Code | 5567
-Estimated Cost to Develop  | $163886.77
+Total Source Lines of Code | 5,567
+Estimated Cost to Develop  | $163,886.77
 Estimated Schedule Effort  | 6.92 months
 Estimated People Required  | 2.10
 ```
 
 ```text
 $ cocomo ~/github.com/XAMPPRocky/tokei -o sloccount
-Total Physical Source Lines of Code (SLOC)                    = 5567
+Total Physical Source Lines of Code (SLOC)                    = 5,567
 Development Effort Estimate, Person-Years (Person-Months)     = 1.21 (14.56)
   (Basic COCOMO model, Person-Months = 2.40*(KSLOC**1.05)*1.00)
 Schedule Estimate, Years (Months)                             = 0.58 (6.92)
   (Basic COCOMO model, Months = 2.50*(person-months**0.38))
 Estimated Average Number of Developers (Effort/Schedule)      = 2.10
-Total Estimated Cost to Develop                               = $163887
-  (average salary = $56286/year, overhead = 2.40)
+Total Estimated Cost to Develop                               = $163,887
+  (average salary = $56,286/year, overhead = 2.40)
 ```
 

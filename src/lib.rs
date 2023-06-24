@@ -1,5 +1,12 @@
+use lazy_static::lazy_static;
 use std::fmt;
 use std::path::PathBuf;
+
+//--------------------------------------------------------------------------------------------------
+
+lazy_static! {
+    static ref NUM: format_num::NumberFormat = format_num::NumberFormat::new();
+}
 
 //--------------------------------------------------------------------------------------------------
 
@@ -136,44 +143,48 @@ impl Cocomo {
                     "\
 Description                | Value
 ---------------------------|---------------------------------
-Total Source Lines of Code | {:.0}
-Estimated Cost to Develop  | {}{:.2}
-Estimated Schedule Effort  | {:.2} months
-Estimated People Required  | {:.2}
+Total Source Lines of Code | {}
+Estimated Cost to Develop  | {}{}
+Estimated Schedule Effort  | {} months
+Estimated People Required  | {}
 \
                     ",
-                    self.sloc, self.cur, self.cost, self.months, self.people,
+                    integer(self.sloc),
+                    self.cur,
+                    float(self.cost),
+                    float(self.months),
+                    float(self.people),
                 )
             }
             Sloccount => {
                 format!(
                     "\
-Total Physical Source Lines of Code (SLOC)                    = {:.0}
-Development Effort Estimate, Person-Years (Person-Months)     = {:.2} ({:.2})
-  (Basic COCOMO model, Person-Months = {:.2}*(KSLOC**{:.2})*{:.2})
-Schedule Estimate, Years (Months)                             = {:.2} ({:.2})
-  (Basic COCOMO model, Months = {:.2}*(person-months**{:.2}))
-Estimated Average Number of Developers (Effort/Schedule)      = {:.2}
-Total Estimated Cost to Develop                               = {}{:.0}
-  (average salary = {}{:.0}/year, overhead = {:.2})
+Total Physical Source Lines of Code (SLOC)                    = {}
+Development Effort Estimate, Person-Years (Person-Months)     = {} ({})
+  (Basic COCOMO model, Person-Months = {}*(KSLOC**{})*{})
+Schedule Estimate, Years (Months)                             = {} ({})
+  (Basic COCOMO model, Months = {}*(person-months**{}))
+Estimated Average Number of Developers (Effort/Schedule)      = {}
+Total Estimated Cost to Develop                               = {}{}
+  (average salary = {}{}/year, overhead = {})
 \
                     ",
-                    self.sloc,
-                    self.effort / 12.0,
-                    self.effort,
-                    self.params.0,
-                    self.params.1,
-                    self.eaf,
-                    self.months / 12.0,
-                    self.months,
-                    self.dev_time,
-                    self.params.2,
-                    self.people,
+                    integer(self.sloc),
+                    float(self.effort / 12.0),
+                    float(self.effort),
+                    float(self.params.0),
+                    float(self.params.1),
+                    float(self.eaf),
+                    float(self.months / 12.0),
+                    float(self.months),
+                    float(self.dev_time),
+                    float(self.params.2),
+                    float(self.people),
                     self.cur,
-                    self.cost,
+                    integer(self.cost),
                     self.cur,
-                    self.avg_wage,
-                    self.overhead,
+                    integer(self.avg_wage),
+                    float(self.overhead),
                 )
             }
         }
@@ -230,4 +241,12 @@ pub fn cocomo(
     let months = estimate_months(effort, params, dev_time);
     let people = effort / months;
     (effort, cost, months, people)
+}
+
+fn integer(n: f64) -> String {
+    NUM.format(",d", n)
+}
+
+fn float(n: f64) -> String {
+    NUM.format(",.2f", n)
 }
