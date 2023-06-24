@@ -87,7 +87,7 @@ $ tokei ~/github.com/XAMPPRocky/tokei
 ===============================================================================
 ```
 
-Use [cocomo] to calculate COCOMO estimates
+Use [cocomo](https://crates.io/crates/cocomo) CLI to calculate COCOMO estimates
 
 ```text
 $ cocomo ~/github.com/XAMPPRocky/tokei
