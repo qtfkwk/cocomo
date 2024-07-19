@@ -12,7 +12,7 @@ See also [tokei#359].
 
 # Usage
 
-```test
+```text
 $ cocomo -h
 COCOMO (Constructive Cost Model) CLI utility and library
 
@@ -55,6 +55,11 @@ Options:
           Print version
 ```
 
+```text
+$ cocomo -V
+cocomo 0.7.2
+```
+
 # Examples
 
 Use [tokei] CLI to count lines of code in a given directory
@@ -65,7 +70,7 @@ $ tokei ~/github.com/XAMPPRocky/tokei
  Language            Files        Lines         Code     Comments       Blanks
 ===============================================================================
  BASH                    4           48           30           10            8
- JSON                    1         1706         1706            0            0
+ JSON                    1         1800         1800            0            0
  Shell                   1           49           38            1           10
  TOML                    3          125          104            5           16
 -------------------------------------------------------------------------------
@@ -73,17 +78,18 @@ $ tokei ~/github.com/XAMPPRocky/tokei
  |- JavaScript           1           15           11            4            0
  (Total)                             27           20            5            2
 -------------------------------------------------------------------------------
- Markdown                5         1518            0         1211          307
- |- JSON                 1           47           47            0            0
+ Markdown                5         1583            0         1265          318
+ |- BASH                 1            3            3            0            0
+ |- JSON                 1           46           46            0            0
  |- Rust                 1            7            4            3            0
  |- Shell                1           16           14            0            2
- (Total)                           1588           65         1214          309
+ (Total)                           1655           67         1268          320
 -------------------------------------------------------------------------------
- Rust                   23         4385         3680          130          575
- |- Markdown            13          374            5          318           51
- (Total)                           4759         3685          448          626
+ Rust                   24         4536         3813          135          588
+ |- Markdown            13          386            5          327           54
+ (Total)                           4922         3818          462          642
 ===============================================================================
- Total                  38         7843         5567         1358          918
+ Total                  39         8153         5794         1417          942
 ===============================================================================
 ```
 
@@ -93,36 +99,39 @@ Use [cocomo](https://crates.io/crates/cocomo) CLI to calculate COCOMO estimates
 $ cocomo ~/github.com/XAMPPRocky/tokei
 Description                | Value
 ---------------------------|---------------------------------
-Total Source Lines of Code | 5,567
-Estimated Cost to Develop  | $163,886.77
-Estimated Schedule Effort  | 6.92 months
-Estimated People Required  | 2.10
+Total Source Lines of Code | 5,794
+Estimated Cost to Develop  | $170,910.62
+Estimated Schedule Effort  | 7.03 months
+Estimated People Required  | 2.16
+
 ```
 
 Add `-o sloccount` to use the SLOCCount-style output format
 
 ```text
 $ cocomo ~/github.com/XAMPPRocky/tokei -o sloccount
-Total Physical Source Lines of Code (SLOC)                    = 5,567
-Development Effort Estimate, Person-Years (Person-Months)     = 1.21 (14.56)
+Total Physical Source Lines of Code (SLOC)                    = 5,794
+Development Effort Estimate, Person-Years (Person-Months)     = 1.27 (15.18)
   (Basic COCOMO model, Person-Months = 2.40*(KSLOC**1.05)*1.00)
-Schedule Estimate, Years (Months)                             = 0.58 (6.92)
+Schedule Estimate, Years (Months)                             = 0.59 (7.03)
   (Basic COCOMO model, Months = 2.50*(person-months**0.38))
-Estimated Average Number of Developers (Effort/Schedule)      = 2.10
-Total Estimated Cost to Develop                               = $163,887
+Estimated Average Number of Developers (Effort/Schedule)      = 2.16
+Total Estimated Cost to Develop                               = $170,911
   (average salary = $56,286/year, overhead = 2.40)
+
 ```
 
 Pass `--sloc N` to calculate COCOMO estimates for a given number of lines of
 code (without counting SLOC in any files or directories)
 
 ```text
-$ cocomo --sloc 5567
+$ cocomo --sloc 5794
 Description                | Value
 ---------------------------|---------------------------------
-Total Source Lines of Code | 5,567
-Estimated Cost to Develop  | $163,886.77
-Estimated Schedule Effort  | 6.92 months
-Estimated People Required  | 2.10
+Total Source Lines of Code | 5,794
+Estimated Cost to Develop  | $170,910.62
+Estimated Schedule Effort  | 7.03 months
+Estimated People Required  | 2.16
+
 ```
 
