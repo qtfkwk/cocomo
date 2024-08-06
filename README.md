@@ -57,7 +57,7 @@ Options:
 
 ```text
 $ cocomo -V
-cocomo 0.7.2
+cocomo 0.7.3
 ```
 
 # Examples

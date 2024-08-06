@@ -105,6 +105,7 @@ impl Cocomo {
     /**
     Calculate COCOMO estimates
     */
+    #[allow(clippy::too_many_arguments)]
     pub fn new(
         cur: &str,
         eaf: f64,

@@ -18,4 +18,5 @@
 * 0.7.0 (2023-06-24): Add `--sloc` option; improve readme; update dependencies
     * 0.7.1 (2023-06-24): Fix readme
     * 0.7.2 (2024-07-19): Fix changelog and readme; update dependencies
+    * 0.7.3 (2024-08-06): Add `Makefile.md`; update dependencies
 
