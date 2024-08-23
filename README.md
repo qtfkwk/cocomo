@@ -57,7 +57,7 @@ Options:
 
 ```text
 $ cocomo -V
-cocomo 0.7.3
+cocomo 0.7.4
 ```
 
 # Examples
@@ -70,7 +70,7 @@ $ tokei ~/github.com/XAMPPRocky/tokei
  Language            Files        Lines         Code     Comments       Blanks
 ===============================================================================
  BASH                    4           48           30           10            8
- JSON                    1         1800         1800            0            0
+ JSON                    1         1923         1923            0            0
  Shell                   1           49           38            1           10
  TOML                    3          125          104            5           16
 -------------------------------------------------------------------------------
@@ -78,18 +78,18 @@ $ tokei ~/github.com/XAMPPRocky/tokei
  |- JavaScript           1           15           11            4            0
  (Total)                             27           20            5            2
 -------------------------------------------------------------------------------
- Markdown                5         1583            0         1265          318
+ Markdown                5         1662            0         1339          323
  |- BASH                 1            3            3            0            0
  |- JSON                 1           46           46            0            0
  |- Rust                 1            7            4            3            0
  |- Shell                1           16           14            0            2
- (Total)                           1655           67         1268          320
+ (Total)                           1734           67         1342          325
 -------------------------------------------------------------------------------
- Rust                   24         4536         3813          135          588
+ Rust                   24         4557         3829          140          588
  |- Markdown            13          386            5          327           54
- (Total)                           4922         3818          462          642
+ (Total)                           4943         3834          467          642
 ===============================================================================
- Total                  39         8153         5794         1417          942
+ Total                  39         8376         5933         1496          947
 ===============================================================================
 ```
 
@@ -99,10 +99,10 @@ Use [cocomo](https://crates.io/crates/cocomo) CLI to calculate COCOMO estimates
 $ cocomo ~/github.com/XAMPPRocky/tokei
 Description                | Value
 ---------------------------|---------------------------------
-Total Source Lines of Code | 5,794
-Estimated Cost to Develop  | $170,910.62
-Estimated Schedule Effort  | 7.03 months
-Estimated People Required  | 2.16
+Total Source Lines of Code | 5,933
+Estimated Cost to Develop  | $175,218.39
+Estimated Schedule Effort  | 7.10 months
+Estimated People Required  | 2.19
 
 ```
 
@@ -110,13 +110,13 @@ Add `-o sloccount` to use the SLOCCount-style output format
 
 ```text
 $ cocomo ~/github.com/XAMPPRocky/tokei -o sloccount
-Total Physical Source Lines of Code (SLOC)                    = 5,794
-Development Effort Estimate, Person-Years (Person-Months)     = 1.27 (15.18)
+Total Physical Source Lines of Code (SLOC)                    = 5,933
+Development Effort Estimate, Person-Years (Person-Months)     = 1.30 (15.57)
   (Basic COCOMO model, Person-Months = 2.40*(KSLOC**1.05)*1.00)
-Schedule Estimate, Years (Months)                             = 0.59 (7.03)
+Schedule Estimate, Years (Months)                             = 0.59 (7.10)
   (Basic COCOMO model, Months = 2.50*(person-months**0.38))
-Estimated Average Number of Developers (Effort/Schedule)      = 2.16
-Total Estimated Cost to Develop                               = $170,911
+Estimated Average Number of Developers (Effort/Schedule)      = 2.19
+Total Estimated Cost to Develop                               = $175,218
   (average salary = $56,286/year, overhead = 2.40)
 
 ```
