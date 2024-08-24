@@ -18,4 +18,5 @@
     * 0.7.3 (2024-08-06): Add `Makefile.md`; update dependencies
     * 0.7.4 (2024-08-23): Add `commit` target to makefile; update dependencies
 * 0.8.0 (2024-08-24): Add USA inflation rates for 1995 (origin of $56,286 average wage) to 2024; add `--inflation-multiplier` and `--inflation-year` options; add more details for the `--project-type` and `--custom` options; fix changelog
+    * 0.8.1 (2023-08-24): Fix readme
 

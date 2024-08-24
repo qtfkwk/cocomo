@@ -5,6 +5,7 @@ using [tokei] as a library to calculate total SLOC and [scc] as reference
 
 See also [tokei#359].
 
+[cocomo]: https://crates.io/crates/cocomo
 [COCOMO]: https://en.wikipedia.org/wiki/COCOMO
 [tokei]: https://crates.io/crates/tokei
 [tokei#359]: https://github.com/XAMPPRocky/tokei/issues/359
@@ -33,15 +34,21 @@ Options:
           argument(s)*]
       --average-wage <f64>
           Average Wage [default: 56286.0]
+      --inflation-multiplier <f64>
+          Inflation multiplier [default: 1.0]
+      --inflation-year <usize>
+          Inflation year (1995-2024) [default: 1995]
       --overhead <f64>
           Overhead [default: 2.4]
       --eaf <f64>
           Effort Adjustment Factor (EAF); typically 0.9 - 1.4 [default: 1.0]
       --project-type <TYPE>
-          Project type [default: organic] [possible values: embedded, organic,
-          semi-detached]
+          Project type (organic: "--custom 2.4,1.05,0.38", embedded: "--custom
+          3.6,1.20,0.32", semi-detached: "--custom 3.0,1.12,0.35") [default:
+          organic] [possible values: embedded, organic, semi-detached]
       --custom <f64,f64,f64>
-          Custom parameters (a, b, c)
+          Custom parameters (a, b, c) [default: "2.4,1.05,0.38" ("--project-type
+          organic")]
       --development-time <f64>
           Development time (d) [default: 2.5]
       --currency-symbol <STRING>
@@ -57,7 +64,7 @@ Options:
 
 ```text
 $ cocomo -V
-cocomo 0.7.4
+cocomo 0.8.1
 ```
 
 # Examples
@@ -93,7 +100,7 @@ $ tokei ~/github.com/XAMPPRocky/tokei
 ===============================================================================
 ```
 
-Use [cocomo](https://crates.io/crates/cocomo) CLI to calculate COCOMO estimates
+Use [cocomo] CLI to calculate COCOMO estimates
 
 ```text
 $ cocomo ~/github.com/XAMPPRocky/tokei
@@ -134,4 +141,19 @@ Estimated Schedule Effort  | 7.03 months
 Estimated People Required  | 2.16
 
 ```
+
+# Notes
+
+1. Prior to version 0.8.0 (2024-08-24), [cocomo] did not account for inflation,
+   assuming the user could simply modify the default average wage as desired for
+   a given country or other locale and/or time.
+   [cocomo] now incorporates the USA inflation rates for 1995 (the year that the
+   $56,286 average wage figure comes from) to 2024.
+   The defaults remain the same as before, which means that [cocomo] gives
+   cost figures in 1995 USD (as it always has, unless its use was customized).
+   Going forward, if you want [cocomo] to report costs in the current year,
+   please provide it via the `--inflation-year` option.
+   Note that any given year outside the range above causes [cocomo] to revert to
+   the inflation multiplier given via the `--inflation-multiplier` option which
+   is `1.0` by default and effectively represents the year `1995`.
 
