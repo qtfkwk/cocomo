@@ -23,6 +23,14 @@ struct Cli {
     #[arg(long, value_name = "f64", default_value = "56286.0")]
     average_wage: f64,
 
+    /// Inflation multiplier
+    #[arg(long, value_name = "f64", default_value = "1.0")]
+    inflation_multiplier: f64,
+
+    /// Inflation year (1995-2024)
+    #[arg(long, value_name = "usize", default_value = "1995")]
+    inflation_year: Option<usize>,
+
     /// Overhead
     #[arg(long, value_name = "f64", default_value = "2.4")]
     overhead: f64,
@@ -31,11 +39,14 @@ struct Cli {
     #[arg(long, value_name = "f64", default_value = "1.0")]
     eaf: f64,
 
-    /// Project type
+    /**
+    Project type (organic: "--custom 2.4,1.05,0.38", embedded: "--custom 3.6,1.20,0.32",
+    semi-detached: "--custom 3.0,1.12,0.35")
+    */
     #[arg(long, value_name = "TYPE", default_value = "organic")]
     project_type: ProjectType,
 
-    /// Custom parameters (a, b, c)
+    /// Custom parameters (a, b, c) [default: "2.4,1.05,0.38" ("--project-type organic")]
     #[arg(long, value_name = "f64,f64,f64", conflicts_with = "project_type")]
     custom: Option<String>,
 
@@ -89,6 +100,8 @@ fn main() {
         cli.development_time,
         &cli.paths,
         &cli.sloc,
+        cli.inflation_multiplier,
+        &cli.inflation_year,
     );
 
     // Print report

@@ -1,11 +1,46 @@
-use lazy_static::lazy_static;
-use std::fmt;
-use std::path::PathBuf;
+use {
+    lazy_static::lazy_static,
+    std::{collections::BTreeMap, fmt, path::PathBuf},
+};
 
 //--------------------------------------------------------------------------------------------------
 
 lazy_static! {
     static ref NUM: format_num::NumberFormat = format_num::NumberFormat::new();
+    pub static ref USA_YEAR_INFLATION_MULTIPLIER: BTreeMap<usize, (f64, f64)> = [
+        (1995, (2.83, 1.0000)),
+        (1996, (2.64, 1.0283)),
+        (1997, (2.57, 1.0547)),
+        (1998, (2.14, 1.0804)),
+        (1999, (2.23, 1.1018)),
+        (2000, (3.38, 1.1241)),
+        (2001, (2.77, 1.1579)),
+        (2002, (2.44, 1.1856)),
+        (2003, (2.27, 1.2100)),
+        (2004, (3.38, 1.2327)),
+        (2005, (3.39, 1.2665)),
+        (2006, (2.54, 1.3004)),
+        (2007, (2.85, 1.3258)),
+        (2008, (3.84, 1.3543)),
+        (2009, (-0.36, 1.3927)),
+        (2010, (1.64, 1.3891)),
+        (2011, (3.16, 1.4055)),
+        (2012, (2.07, 1.4371)),
+        (2013, (1.46, 1.4578)),
+        (2014, (1.62, 1.4724)),
+        (2015, (0.12, 1.4886)),
+        (2016, (1.26, 1.4898)),
+        (2017, (2.13, 1.5024)),
+        (2018, (2.44, 1.5237)),
+        (2019, (2.29, 1.5481)),
+        (2020, (1.23, 1.5710)),
+        (2021, (4.70, 1.5833)),
+        (2022, (6.49, 1.6303)),
+        (2023, (6.56, 1.6952)),
+        (2024, (2.90, 1.7608)), // as of July 2024, with the next update scheduled for September 11, 2024
+    ]
+    .into_iter()
+    .collect();
 }
 
 //--------------------------------------------------------------------------------------------------
@@ -115,14 +150,31 @@ impl Cocomo {
         dev_time: f64,
         paths: &[PathBuf],
         sloc: &Option<f64>,
+        inflation_multiplier: f64,
+        inflation_year: &Option<usize>,
     ) -> Cocomo {
         let sloc = if let Some(n) = sloc {
             *n
         } else {
             total_sloc(paths)
         };
-        let (effort, cost, months, people) =
-            cocomo(sloc, eaf, avg_wage, overhead, params, dev_time);
+        let inflation_multiplier = if let Some(year) = inflation_year {
+            USA_YEAR_INFLATION_MULTIPLIER
+                .get(year)
+                .unwrap_or(&(0.0, inflation_multiplier))
+                .1
+        } else {
+            inflation_multiplier
+        };
+        let (effort, cost, months, people) = cocomo(
+            sloc,
+            eaf,
+            avg_wage,
+            overhead,
+            params,
+            dev_time,
+            inflation_multiplier,
+        );
         Cocomo {
             cur: cur.to_string(),
             eaf,
@@ -213,8 +265,8 @@ pub fn total_sloc(paths: &[PathBuf]) -> f64 {
 /**
 Calculate COCOMO cost estimate
 */
-pub fn estimate_cost(effort: f64, avg_wage: f64, overhead: f64) -> f64 {
-    effort * avg_wage / 12.0 * overhead
+pub fn estimate_cost(effort: f64, avg_wage: f64, overhead: f64, inflation_multiplier: f64) -> f64 {
+    effort * avg_wage / 12.0 * overhead * inflation_multiplier
 }
 
 /**
@@ -241,9 +293,10 @@ pub fn cocomo(
     overhead: f64,
     params: &(f64, f64, f64),
     dev_time: f64,
+    inflation_multiplier: f64,
 ) -> (f64, f64, f64, f64) {
     let effort = estimate_effort(sloc, eaf, params);
-    let cost = estimate_cost(effort, avg_wage, overhead);
+    let cost = estimate_cost(effort, avg_wage, overhead, inflation_multiplier);
     let months = estimate_months(effort, params, dev_time);
     let people = effort / months;
     (effort, cost, months, people)
