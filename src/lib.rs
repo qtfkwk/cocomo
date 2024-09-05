@@ -112,6 +112,7 @@ impl fmt::Display for ProjectType {
 pub enum OutputFormat {
     MarkdownTable,
     Sloccount,
+    SloccountInflation,
 }
 
 pub use OutputFormat::*;
@@ -134,6 +135,8 @@ pub struct Cocomo {
     pub cost: f64,
     pub months: f64,
     pub people: f64,
+    pub inflation_multiplier: f64,
+    pub inflation_year: Option<usize>,
 }
 
 impl Cocomo {
@@ -166,15 +169,9 @@ impl Cocomo {
         } else {
             inflation_multiplier
         };
-        let (effort, cost, months, people) = cocomo(
-            sloc,
-            eaf,
-            avg_wage,
-            overhead,
-            params,
-            dev_time,
-            inflation_multiplier,
-        );
+        let avg_wage = avg_wage * inflation_multiplier;
+        let (effort, cost, months, people) =
+            cocomo(sloc, eaf, avg_wage, overhead, params, dev_time);
         Cocomo {
             cur: cur.to_string(),
             eaf,
@@ -188,6 +185,8 @@ impl Cocomo {
             cost,
             months,
             people,
+            inflation_multiplier,
+            inflation_year: *inflation_year,
         }
     }
 
@@ -245,6 +244,43 @@ Total Estimated Cost to Develop                               = {}{}
                     float(self.overhead),
                 )
             }
+            SloccountInflation => {
+                format!(
+                    "\
+Total Physical Source Lines of Code (SLOC)                    = {}
+Development Effort Estimate, Person-Years (Person-Months)     = {} ({})
+  (Basic COCOMO model, Person-Months = {}*(KSLOC**{})*{})
+Schedule Estimate, Years (Months)                             = {} ({})
+  (Basic COCOMO model, Months = {}*(person-months**{}))
+Estimated Average Number of Developers (Effort/Schedule)      = {}
+Total Estimated Cost to Develop                               = {}{}
+  (average salary {}@{}*1995 = {}{}/year, overhead = {})
+\
+                    ",
+                    integer(self.sloc),
+                    float(self.effort / 12.0),
+                    float(self.effort),
+                    float(self.params.0),
+                    float(self.params.1),
+                    float(self.eaf),
+                    float(self.months / 12.0),
+                    float(self.months),
+                    float(self.dev_time),
+                    float(self.params.2),
+                    float(self.people),
+                    self.cur,
+                    integer(self.cost),
+                    if let Some(year) = self.inflation_year {
+                        format!("{year}")
+                    } else {
+                        String::new()
+                    },
+                    float(self.inflation_multiplier),
+                    self.cur,
+                    integer(self.avg_wage),
+                    float(self.overhead),
+                )
+            }
         }
     }
 }
@@ -265,8 +301,8 @@ pub fn total_sloc(paths: &[PathBuf]) -> f64 {
 /**
 Calculate COCOMO cost estimate
 */
-pub fn estimate_cost(effort: f64, avg_wage: f64, overhead: f64, inflation_multiplier: f64) -> f64 {
-    effort * avg_wage / 12.0 * overhead * inflation_multiplier
+pub fn estimate_cost(effort: f64, avg_wage: f64, overhead: f64) -> f64 {
+    effort * avg_wage / 12.0 * overhead
 }
 
 /**
@@ -293,10 +329,9 @@ pub fn cocomo(
     overhead: f64,
     params: &(f64, f64, f64),
     dev_time: f64,
-    inflation_multiplier: f64,
 ) -> (f64, f64, f64, f64) {
     let effort = estimate_effort(sloc, eaf, params);
-    let cost = estimate_cost(effort, avg_wage, overhead, inflation_multiplier);
+    let cost = estimate_cost(effort, avg_wage, overhead);
     let months = estimate_months(effort, params, dev_time);
     let people = effort / months;
     (effort, cost, months, people)

@@ -19,4 +19,5 @@
     * 0.7.4 (2024-08-23): Add `commit` target to makefile; update dependencies
 * 0.8.0 (2024-08-24): Add USA inflation rates for 1995 (origin of $56,286 average wage) to 2024; add `--inflation-multiplier` and `--inflation-year` options; add more details for the `--project-type` and `--custom` options; fix changelog
     * 0.8.1 (2023-08-24): Fix readme
+* 0.9.0 (2023-09-05): Apply inflation multiplier to average wage during creation and restore `cocomo` and `estimate_cost` function signatures to pre-0.8.0; add sloccount-inflation output format; update dependencies
 

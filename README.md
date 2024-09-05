@@ -55,7 +55,7 @@ Options:
           Currency symbol [default: $]
   -o, --output-format <FORMAT>
           Output format [default: markdown-table] [possible values:
-          markdown-table, sloccount]
+          markdown-table, sloccount, sloccount-inflation]
   -h, --help
           Print help (see more with '--help')
   -V, --version
@@ -64,7 +64,7 @@ Options:
 
 ```text
 $ cocomo -V
-cocomo 0.8.1
+cocomo 0.9.0
 ```
 
 # Examples

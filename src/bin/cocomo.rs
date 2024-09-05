@@ -27,8 +27,8 @@ struct Cli {
     #[arg(long, value_name = "f64", default_value = "1.0")]
     inflation_multiplier: f64,
 
-    /// Inflation year (1995-2024)
-    #[arg(long, value_name = "usize", default_value = "1995")]
+    /// Inflation year (1995-2024) [default: 1995]
+    #[arg(long, value_name = "usize")]
     inflation_year: Option<usize>,
 
     /// Overhead
