@@ -1,5 +1,16 @@
-use clap::Parser;
-use cocomo::*;
+use {
+    clap::{builder::Styles, Parser},
+    cocomo::*,
+};
+
+const STYLES: Styles = Styles::styled()
+    .header(clap_cargo::style::HEADER)
+    .usage(clap_cargo::style::USAGE)
+    .literal(clap_cargo::style::LITERAL)
+    .placeholder(clap_cargo::style::PLACEHOLDER)
+    .error(clap_cargo::style::ERROR)
+    .valid(clap_cargo::style::VALID)
+    .invalid(clap_cargo::style::INVALID);
 
 #[derive(Parser)]
 #[command(
@@ -12,7 +23,8 @@ See also: <https://en.wikipedia.org/wiki/COCOMO>
 
 ---",
     version,
-    max_term_width = 80
+    max_term_width = 80,
+    styles = STYLES,
 )]
 struct Cli {
     /// Source lines of code [default: *calculate from Files / Directories argument(s)*]
