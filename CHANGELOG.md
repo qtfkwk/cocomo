@@ -21,5 +21,6 @@
     * 0.8.1 (2024-08-24): Fix readme
 * 0.9.0 (2024-09-05): Apply inflation multiplier to average wage during creation and restore `cocomo` and `estimate_cost` function signatures to pre-0.8.0; add sloccount-inflation output format; update dependencies
 * 0.10.0 (2024-10-26): Fix changelog; add clap color; update dependencies
-* 0.10.1 (2024-12-04): Update dependencies
+    * 0.10.1 (2024-12-04): Update dependencies
+    * 0.10.2 (2025-02-21): Update dependencies; fix changelog
 
