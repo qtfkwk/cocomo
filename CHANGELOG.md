@@ -23,4 +23,5 @@
 * 0.10.0 (2024-10-26): Fix changelog; add clap color; update dependencies
     * 0.10.1 (2024-12-04): Update dependencies
     * 0.10.2 (2025-02-21): Update dependencies; fix changelog
+    * 0.10.3 (2025-04-16): Update dependencies
 
