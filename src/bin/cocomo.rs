@@ -1,5 +1,5 @@
 use {
-    clap::{builder::Styles, Parser},
+    clap::{Parser, builder::Styles},
     cocomo::*,
 };
 
