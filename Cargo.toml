@@ -1,6 +1,6 @@
 [package]
 name = "cocomo"
-version = "0.11.1"
+version = "0.11.2"
 edition = "2024"
 description = "COCOMO (Constructive Cost Model) CLI utility and library"
 repository = "https://github.com/qtfkwk/cocomo"
@@ -8,8 +8,8 @@ keywords = [ "loc", "sloc", "cloc", "scc", "tokei" ]
 license = "MIT"
 
 [dependencies]
-clap = { version = "4.5.50", features = ["derive", "wrap_help"] }
+clap = { version = "4.5.51", features = ["derive", "wrap_help"] }
 clap-cargo = "0.18.3"
+conv = "0.3.3"
 format_num = "0.1.0"
-lazy_static = "1.5.0"
 tokei = "12.1.2"

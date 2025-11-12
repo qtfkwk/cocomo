@@ -1,47 +1,49 @@
 use {
-    lazy_static::lazy_static,
-    std::{collections::BTreeMap, fmt, path::PathBuf},
+    conv::ValueFrom,
+    std::{collections::BTreeMap, fmt, path::PathBuf, sync::LazyLock},
 };
 
 //--------------------------------------------------------------------------------------------------
 
-lazy_static! {
-    static ref NUM: format_num::NumberFormat = format_num::NumberFormat::new();
-    pub static ref USA_YEAR_INFLATION_MULTIPLIER: BTreeMap<usize, (f64, f64)> = [
-        (1995, (2.83, 1.0000)),
-        (1996, (2.64, 1.0283)),
-        (1997, (2.57, 1.0547)),
-        (1998, (2.14, 1.0804)),
-        (1999, (2.23, 1.1018)),
-        (2000, (3.38, 1.1241)),
-        (2001, (2.77, 1.1579)),
-        (2002, (2.44, 1.1856)),
-        (2003, (2.27, 1.2100)),
-        (2004, (3.38, 1.2327)),
-        (2005, (3.39, 1.2665)),
-        (2006, (2.54, 1.3004)),
-        (2007, (2.85, 1.3258)),
-        (2008, (3.84, 1.3543)),
-        (2009, (-0.36, 1.3927)),
-        (2010, (1.64, 1.3891)),
-        (2011, (3.16, 1.4055)),
-        (2012, (2.07, 1.4371)),
-        (2013, (1.46, 1.4578)),
-        (2014, (1.62, 1.4724)),
-        (2015, (0.12, 1.4886)),
-        (2016, (1.26, 1.4898)),
-        (2017, (2.13, 1.5024)),
-        (2018, (2.44, 1.5237)),
-        (2019, (2.29, 1.5481)),
-        (2020, (1.23, 1.5710)),
-        (2021, (4.70, 1.5833)),
-        (2022, (6.49, 1.6303)),
-        (2023, (6.56, 1.6952)),
-        (2024, (2.90, 1.7608)), // as of July 2024, with the next update scheduled for September 11, 2024
-    ]
-    .into_iter()
-    .collect();
-}
+static NUM: LazyLock<format_num::NumberFormat> = LazyLock::new(format_num::NumberFormat::new);
+
+pub static USA_YEAR_INFLATION_MULTIPLIER: LazyLock<BTreeMap<usize, (f64, f64)>> =
+    LazyLock::new(|| {
+        [
+            (1995, (2.83, 1.0000)),
+            (1996, (2.64, 1.0283)),
+            (1997, (2.57, 1.0547)),
+            (1998, (2.14, 1.0804)),
+            (1999, (2.23, 1.1018)),
+            (2000, (3.38, 1.1241)),
+            (2001, (2.77, 1.1579)),
+            (2002, (2.44, 1.1856)),
+            (2003, (2.27, 1.2100)),
+            (2004, (3.38, 1.2327)),
+            (2005, (3.39, 1.2665)),
+            (2006, (2.54, 1.3004)),
+            (2007, (2.85, 1.3258)),
+            (2008, (3.84, 1.3543)),
+            (2009, (-0.36, 1.3927)),
+            (2010, (1.64, 1.3891)),
+            (2011, (3.16, 1.4055)),
+            (2012, (2.07, 1.4371)),
+            (2013, (1.46, 1.4578)),
+            (2014, (1.62, 1.4724)),
+            (2015, (0.12, 1.4886)),
+            (2016, (1.26, 1.4898)),
+            (2017, (2.13, 1.5024)),
+            (2018, (2.44, 1.5237)),
+            (2019, (2.29, 1.5481)),
+            (2020, (1.23, 1.5710)),
+            (2021, (4.70, 1.5833)),
+            (2022, (6.49, 1.6303)),
+            (2023, (6.56, 1.6952)),
+            (2024, (2.90, 1.7608)), // as of July 2024, with the next update scheduled for September 11, 2024
+        ]
+        .into_iter()
+        .collect()
+    });
 
 //--------------------------------------------------------------------------------------------------
 
@@ -91,6 +93,7 @@ impl ProjectType {
     assert_eq!(SemiDetached.to_params(), (3.0, 1.12, 0.35));
     ```
     */
+    #[must_use]
     pub fn to_params(&self) -> (f64, f64, f64) {
         match self {
             Embedded => (3.6, 1.20, 0.32),
@@ -102,7 +105,7 @@ impl ProjectType {
 
 impl fmt::Display for ProjectType {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{:?}", self)
+        write!(f, "{self:?}")
     }
 }
 
@@ -142,6 +145,10 @@ pub struct Cocomo {
 impl Cocomo {
     /**
     Calculate COCOMO estimates
+
+    # Panics
+
+    Panics if the total SLOC is greater than the maximum number that can be represented by an `f64`
     */
     #[allow(clippy::too_many_arguments)]
     pub fn new(
@@ -159,7 +166,7 @@ impl Cocomo {
         let sloc = if let Some(n) = sloc {
             *n
         } else {
-            total_sloc(paths)
+            f64::value_from(total_sloc(paths)).unwrap()
         };
         let inflation_multiplier = if let Some(year) = inflation_year {
             USA_YEAR_INFLATION_MULTIPLIER
@@ -193,6 +200,7 @@ impl Cocomo {
     /**
     Create a report
     */
+    #[must_use]
     pub fn report(&self, fmt: &OutputFormat) -> String {
         match fmt {
             MarkdownTable => {
@@ -290,17 +298,19 @@ Total Estimated Cost to Develop                               = {}{}
 /**
 Calculate total source lines of code (SLOC) via tokei
 */
-pub fn total_sloc(paths: &[PathBuf]) -> f64 {
+#[must_use]
+pub fn total_sloc(paths: &[PathBuf]) -> usize {
     let config = tokei::Config::default();
     let mut languages = tokei::Languages::new();
     languages.get_statistics(paths, &[], &config);
     let sum = languages.total();
-    sum.code as f64
+    sum.code
 }
 
 /**
 Calculate COCOMO cost estimate
 */
+#[must_use]
 pub fn estimate_cost(effort: f64, avg_wage: f64, overhead: f64) -> f64 {
     effort * avg_wage / 12.0 * overhead
 }
@@ -308,6 +318,7 @@ pub fn estimate_cost(effort: f64, avg_wage: f64, overhead: f64) -> f64 {
 /**
 Calculate COCOMO effort estimate
 */
+#[must_use]
 pub fn estimate_effort(sloc: f64, eaf: f64, params: &(f64, f64, f64)) -> f64 {
     params.0 * (sloc / 1000.0).powf(params.1) * eaf
 }
@@ -315,6 +326,7 @@ pub fn estimate_effort(sloc: f64, eaf: f64, params: &(f64, f64, f64)) -> f64 {
 /**
 Calculate COCOMO time estimate in months
 */
+#[must_use]
 pub fn estimate_months(effort: f64, params: &(f64, f64, f64), dev_time: f64) -> f64 {
     dev_time * effort.powf(params.2)
 }
@@ -322,6 +334,7 @@ pub fn estimate_months(effort: f64, params: &(f64, f64, f64), dev_time: f64) -> 
 /**
 Calculate COCOMO effort, cost, time (months), and people estimates
 */
+#[must_use]
 pub fn cocomo(
     sloc: f64,
     eaf: f64, // Effort Adjustment Factor
