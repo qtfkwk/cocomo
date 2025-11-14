@@ -1,6 +1,6 @@
 [package]
 name = "cocomo"
-version = "0.11.2"
+version = "0.11.3"
 edition = "2024"
 description = "COCOMO (Constructive Cost Model) CLI utility and library"
 repository = "https://github.com/qtfkwk/cocomo"
