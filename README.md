@@ -64,7 +64,7 @@ Options:
 
 ```text
 $ cocomo -V
-cocomo 0.11.3
+cocomo 0.11.4
 ```
 
 # Examples
@@ -73,31 +73,31 @@ Use [tokei] CLI to count lines of code in a given directory
 
 ```text
 $ tokei ~/github.com/XAMPPRocky/tokei
-===============================================================================
- Language            Files        Lines         Code     Comments       Blanks
-===============================================================================
- BASH                    4           48           30           10            8
- JSON                    1         2050         2050            0            0
- Shell                   1           49           38            1           10
- TOML                    3          126          105            5           16
--------------------------------------------------------------------------------
- HTML                    1           12            9            1            2
- |- JavaScript           1           15           11            4            0
- (Total)                             27           20            5            2
--------------------------------------------------------------------------------
- Markdown                5         1720            0         1391          329
- |- BASH                 1            3            3            0            0
- |- JSON                 1           46           46            0            0
- |- Rust                 1            7            4            3            0
- |- Shell                1           16           14            0            2
- (Total)                           1792           67         1394          331
--------------------------------------------------------------------------------
- Rust                   24         4578         3845          140          593
- |- Markdown            14          394            5          335           54
- (Total)                           4972         3850          475          647
-===============================================================================
- Total                  39         8583         6077         1548          958
-===============================================================================
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ Language              Files        Lines         Code     Comments       Blanks
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ BASH                      4           48           30           10            8
+ JSON                      1         2050         2050            0            0
+ Shell                     1           49           38            1           10
+ TOML                      3          126          105            5           16
+─────────────────────────────────────────────────────────────────────────────────
+ HTML                      1           12            9            1            2
+ |- JavaScript             1           15           11            4            0
+ (Total)                               27           20            5            2
+─────────────────────────────────────────────────────────────────────────────────
+ Markdown                  5         1720            0         1391          329
+ |- BASH                   1            3            3            0            0
+ |- JSON                   1           46           46            0            0
+ |- Rust                   1            7            4            3            0
+ |- Shell                  1           16           14            0            2
+ (Total)                             1792           67         1394          331
+─────────────────────────────────────────────────────────────────────────────────
+ Rust                     24         4578         3855          138          585
+ |- Markdown              14          394            5          335           54
+ (Total)                             4972         3860          473          639
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+ Total                    39         9064         6170         1888         1006
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ```
 
 Use [cocomo] CLI to calculate COCOMO estimates
@@ -106,10 +106,10 @@ Use [cocomo] CLI to calculate COCOMO estimates
 $ cocomo ~/github.com/XAMPPRocky/tokei
 Description                | Value
 ---------------------------|---------------------------------
-Total Source Lines of Code | 6,077
-Estimated Cost to Develop  | $179,686.45
-Estimated Schedule Effort  | 7.16 months
-Estimated People Required  | 2.23
+Total Source Lines of Code | 6,170
+Estimated Cost to Develop  | $182,574.89
+Estimated Schedule Effort  | 7.21 months
+Estimated People Required  | 2.25
 
 ```
 
@@ -117,13 +117,13 @@ Add `-o sloccount` to use the SLOCCount-style output format
 
 ```text
 $ cocomo ~/github.com/XAMPPRocky/tokei -o sloccount
-Total Physical Source Lines of Code (SLOC)                    = 6,077
-Development Effort Estimate, Person-Years (Person-Months)     = 1.33 (15.96)
+Total Physical Source Lines of Code (SLOC)                    = 6,170
+Development Effort Estimate, Person-Years (Person-Months)     = 1.35 (16.22)
   (Basic COCOMO model, Person-Months = 2.40*(KSLOC**1.05)*1.00)
-Schedule Estimate, Years (Months)                             = 0.60 (7.16)
+Schedule Estimate, Years (Months)                             = 0.60 (7.21)
   (Basic COCOMO model, Months = 2.50*(person-months**0.38))
-Estimated Average Number of Developers (Effort/Schedule)      = 2.23
-Total Estimated Cost to Develop                               = $179,686
+Estimated Average Number of Developers (Effort/Schedule)      = 2.25
+Total Estimated Cost to Develop                               = $182,575
   (average salary = $56,286/year, overhead = 2.40)
 
 ```
