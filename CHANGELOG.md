@@ -29,6 +29,7 @@
     * 0.11.2 (2025-11-11): Update dependencies; use [`clap-cargo`] `CLAP_STYLING`; clippy fixes
     * 0.11.3 (2025-11-14): Update dependencies; add `clippy::pedantic` to `cargo clippy` command in the `clippy` target in the makefile
     * 0.11.4 (2026-03-03): Update dependencies
+    * 0.11.5 (2026-04-17): Update dependencies
 
 [`clap-cargo`]: https://crates.io/crates/clap-cargo
 
